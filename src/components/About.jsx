@@ -7,42 +7,44 @@ import { services, stats } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { fadeIn, textVariant } from "../utils/motion";
 
-const ServiceCard = ({ index, title, icon, description }) => {
-  return (
-    <Tilt className="xs:w-[250px] w-full" tiltMaxAngleX={15} tiltMaxAngleY={15}>
-      <motion.div
-        variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
-        className="w-full green-pink-gradient p-[1px] rounded-[20px]"
-      >
-        <div className="bg-tertiary rounded-[20px] py-6 px-8 min-h-[280px] flex justify-evenly items-center flex-col glass-card">
-          <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mb-2">
-            <img
-              src={icon}
-              alt={title}
-              className="w-10 h-10 object-contain"
-            />
-          </div>
-          <h3 className="text-white text-[20px] font-bold text-center font-display">
-            {title}
-          </h3>
-          <p className="text-secondary text-[13px] text-center mt-2 leading-relaxed">
-            {description}
-          </p>
-        </div>
-      </motion.div>
-    </Tilt>
-  );
-};
-
-const StatCard = ({ value, label, index }) => (
-  <motion.div
-    variants={fadeIn("up", "spring", 0.3 * index, 0.6)}
-    className="flex flex-col items-center"
+const ServiceCard = ({ index, title, icon, description }) => (
+  <Tilt
+    tiltMaxAngleX={12}
+    tiltMaxAngleY={12}
+    className="xs:w-[250px] w-full"
   >
-    <span className="stat-value text-[36px] sm:text-[48px]">{value}</span>
-    <span className="text-secondary text-[13px] sm:text-[14px] mt-1 font-medium tracking-wide">
-      {label}
-    </span>
+    <motion.div
+      variants={fadeIn("right", "spring", 0.5 * index, 0.75)}
+      className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
+    >
+      <div className="bg-[#0a0a2e] rounded-[20px] py-6 px-6 min-h-[240px] flex flex-col justify-start items-center relative overflow-hidden">
+        {/* Grid overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: "linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }} />
+
+        <img src={icon} alt={title} className="w-16 h-16 object-contain relative z-10" />
+        <h3 className="text-white text-[17px] font-bold text-center mt-3 font-display relative z-10">
+          {title}
+        </h3>
+        <p className="text-secondary/50 text-[12px] text-center mt-2 leading-relaxed relative z-10">
+          {description}
+        </p>
+      </div>
+    </motion.div>
+  </Tilt>
+);
+
+const StatItem = ({ value, label, index }) => (
+  <motion.div
+    variants={fadeIn("up", "spring", index * 0.2, 0.5)}
+    className="text-center group"
+  >
+    <div className="stat-value text-[36px] sm:text-[44px] mb-1 transition-all duration-300 group-hover:scale-105">
+      {value}
+    </div>
+    <p className="text-secondary/40 text-[12px] font-mono uppercase tracking-[0.15em]">{label}</p>
   </motion.div>
 );
 
@@ -58,7 +60,7 @@ const About = () => {
 
       <motion.p
         variants={fadeIn("", "", 0.1, 1)}
-        className="mt-4 text-secondary text-[16px] max-w-3xl leading-[28px]"
+        className="mt-4 text-secondary/70 text-[15px] max-w-3xl leading-[28px]"
       >
         Full Stack Developer with 1.8+ years of experience building scalable
         frontend and backend systems using Node.js, Express.js, React.js, and
@@ -69,14 +71,14 @@ const About = () => {
       </motion.p>
 
       {/* Stats */}
-      <div className="mt-16 flex flex-wrap justify-center gap-10 sm:gap-16">
+      <div className="mt-12 flex flex-wrap gap-10 sm:gap-16 justify-center">
         {stats.map((stat, index) => (
-          <StatCard key={stat.label} index={index} {...stat} />
+          <StatItem key={stat.label} index={index} {...stat} />
         ))}
       </div>
 
       {/* Service Cards */}
-      <div className="mt-20 flex flex-wrap gap-10 justify-center">
+      <div className="mt-16 flex flex-wrap gap-8 justify-center">
         {services.map((service, index) => (
           <ServiceCard key={service.title} index={index} {...service} />
         ))}
