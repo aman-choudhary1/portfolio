@@ -10,13 +10,13 @@ import {
   Tech,
   Works,
   Footer,
-  MouseGlow,
-  StarsCanvas,
 } from './components';
+import FuturisticCursor from './components/FuturisticCursor';
+import GlobalSceneCanvas from './components/canvas/GlobalScene';
 
-/* CSS-only wave divider — no extra WebGL context */
-const WaveDivider = () => (
-  <div className="relative w-full h-[80px] overflow-hidden">
+/* CSS-only section divider */
+const SectionDivider = () => (
+  <div className="relative w-full h-[60px] overflow-hidden">
     <div className="wave-divider" />
   </div>
 );
@@ -25,46 +25,37 @@ const App = () => {
   return (
     <BrowserRouter>
       <div className='relative z-0 bg-primary'>
-        {/* Global cursor glow (CSS only, no WebGL) */}
-        <MouseGlow />
+        {/* Futuristic cursor (CSS + Canvas, no WebGL) */}
+        <FuturisticCursor />
+
+        {/* Global scroll-reactive 3D scene — Canvas #1 */}
+        <GlobalSceneCanvas />
 
         {/* Navigation */}
         <Navbar />
 
-        {/* Hero — Canvas #1: HeroScene */}
+        {/* Hero — Canvas #2: HeroScene */}
         <Hero />
 
-        {/* CSS Wave Divider */}
-        <WaveDivider />
-
-        {/* About */}
+        <SectionDivider />
         <About />
 
-        {/* Experience */}
         <Experience />
 
-        {/* CSS Wave Divider */}
-        <WaveDivider />
-
-        {/* Education */}
+        <SectionDivider />
         <Education />
 
-        {/* Skills — Canvas #2: NeuralNetwork + Canvas #3-13: Balls */}
+        {/* Skills — Canvas #3: NeuralNetwork */}
         <Tech />
 
-        {/* CSS Wave Divider */}
-        <WaveDivider />
-
-        {/* Projects */}
+        <SectionDivider />
         <Works />
 
-        {/* Contact — Canvas #14: Earth + Canvas #15: Stars */}
+        {/* Contact — Canvas #4: Earth */}
         <div className='relative z-0'>
           <Contact />
-          <StarsCanvas />
         </div>
 
-        {/* Footer */}
         <Footer />
       </div>
     </BrowserRouter>
