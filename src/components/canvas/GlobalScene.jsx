@@ -236,7 +236,7 @@ const SectionObjects = ({ scrollProgress }) => {
         color="#f72585"
         speed={0.3}
         scale={1.2}
-        rotOffset={3}
+        rotOffset={3} 
       />
       <WireShape
         geometry={<octahedronGeometry args={[0.4]} />}
