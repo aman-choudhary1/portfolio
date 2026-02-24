@@ -16,23 +16,10 @@ import javascript from "./tech/javascript.png";
 import mongodb from "./tech/mongodb.png";
 import nodejs from "./tech/nodejs.png";
 import reactjs from "./tech/reactjs.png";
-import redux from "./tech/redux.png";
 import tailwind from "./tech/tailwind.png";
-import typescript from "./tech/typescript.png";
 import threejs from "./tech/threejs.svg";
 
-import meta from "./company/meta.png";
-import shopify from "./company/shopify.png";
-import starbucks from "./company/starbucks.png";
-import bharti from "./company/bharti.png";
-import bit from "./company/bit.jpg";
-import naresh from "./company/naresh.png";
-import tesla from "./company/tesla.png";
-import micro from "./company/micro.svg";
-
 import vmeet from "./vmeet.png";
-import netflix from "./netflix.png";
-import shareme from "./shareme.png";
 
 export {
   logo,
@@ -52,19 +39,7 @@ export {
   mongodb,
   nodejs,
   reactjs,
-  redux,
   tailwind,
-  typescript,
   threejs,
-  meta,
-  shopify,
-  starbucks,
-  bharti,
-  bit,
-  naresh,
-  micro,
-  tesla,
   vmeet,
-  netflix,
-  shareme,
 };
