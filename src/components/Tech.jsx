@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { BallCanvas } from "./canvas";
+import { NeuralNetworkCanvas } from "./canvas";
 import { SectionWrapper } from "../hoc";
 import { technologies } from "../constants";
 import { styles } from "../styles";
@@ -39,6 +39,30 @@ const skillCategories = [
   },
 ];
 
+/* ─── CSS Tech Icon (replaces WebGL Ball canvas) ─── */
+const TechIcon = ({ name, icon, index }) => (
+  <motion.div
+    variants={fadeIn("up", "spring", index * 0.08, 0.5)}
+    className="group relative"
+  >
+    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-black-100/50 border border-white/5 flex items-center justify-center
+                    hover:border-accent/30 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)] transition-all duration-500
+                    hover:scale-110 cursor-pointer"
+    >
+      <img
+        src={icon}
+        alt={name}
+        className="w-14 h-14 sm:w-16 sm:h-16 object-contain
+                   group-hover:scale-110 transition-transform duration-500
+                   drop-shadow-[0_0_8px_rgba(0,212,255,0.3)]"
+      />
+    </div>
+    <p className="text-center text-secondary/60 text-[11px] mt-2 font-medium group-hover:text-accent transition-colors duration-300">
+      {name}
+    </p>
+  </motion.div>
+);
+
 const Tech = () => {
   return (
     <>
@@ -49,17 +73,26 @@ const Tech = () => {
         </h2>
       </motion.div>
 
-      {/* 3D Tech Balls */}
-      <div className="mt-14 flex flex-row flex-wrap justify-center gap-10">
-        {technologies.map((technology) => (
-          <div className="w-28 h-28" key={technology.name}>
-            <BallCanvas icon={technology.icon} />
-          </div>
+      {/* Neural Network 3D Visualization */}
+      <motion.div
+        variants={fadeIn("up", "spring", 0.2, 0.75)}
+        className="mt-8"
+      >
+        <p className="text-center text-secondary/50 text-[12px] uppercase tracking-[0.3em] font-display mb-2">
+          Neural Network Visualization
+        </p>
+        <NeuralNetworkCanvas />
+      </motion.div>
+
+      {/* Tech Icons (CSS-based, no WebGL) */}
+      <div className="mt-10 flex flex-row flex-wrap justify-center gap-8">
+        {technologies.map((technology, index) => (
+          <TechIcon key={technology.name} index={index} name={technology.name} icon={technology.icon} />
         ))}
       </div>
 
       {/* Skill Categories Grid */}
-      <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {skillCategories.map((category, catIndex) => (
           <motion.div
             key={category.title}
@@ -76,7 +109,7 @@ const Tech = () => {
               {category.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="text-white-100 text-[13px] px-3 py-1.5 rounded-full font-medium"
+                  className="text-white-100 text-[13px] px-3 py-1.5 rounded-full font-medium transition-all duration-300 hover:scale-105"
                   style={{
                     background: `${category.color}15`,
                     border: `1px solid ${category.color}30`,

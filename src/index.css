@@ -360,3 +360,48 @@ body {
 .vertical-timeline::before {
   background: linear-gradient(180deg, #00d4ff, #7b2ff7, #f72585) !important;
 }
+
+/* ═══ CSS Wave Divider ═══ */
+.wave-divider {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 40%, rgba(123, 47, 247, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 40% at 50% 60%, rgba(247, 37, 133, 0.04) 0%, transparent 50%);
+  animation: wave-float 6s ease-in-out infinite;
+}
+
+.wave-divider::before {
+  content: '';
+  position: absolute;
+  inset: 30% 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.25) 20%,
+    rgba(123, 47, 247, 0.3) 50%,
+    rgba(247, 37, 133, 0.25) 80%,
+    transparent 100%
+  );
+  filter: blur(0.5px);
+}
+
+.wave-divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: #00d4ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.6), 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+@keyframes wave-float {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}

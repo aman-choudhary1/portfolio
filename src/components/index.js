@@ -1,4 +1,4 @@
-import { EarthCanvas, BallCanvas, HeroSceneCanvas, StarsCanvas } from './canvas';
+import { EarthCanvas, BallCanvas, HeroSceneCanvas, StarsCanvas, NeuralNetworkCanvas } from './canvas';
 import Hero from './Hero';
 import Navbar from './Navbar';
 import About from './About';
@@ -8,6 +8,7 @@ import Education from './Education';
 import Works from './Works';
 import Contact from './Contact';
 import Footer from './Footer';
+import MouseGlow from './MouseGlow';
 
 export {
   Hero,
@@ -19,8 +20,10 @@ export {
   Works,
   Contact,
   Footer,
+  MouseGlow,
   EarthCanvas,
   BallCanvas,
   HeroSceneCanvas,
-  StarsCanvas
+  StarsCanvas,
+  NeuralNetworkCanvas,
 }
