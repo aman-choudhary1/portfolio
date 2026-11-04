@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 
 import { styles } from "../styles";
-import { HeroSceneCanvas } from "./canvas";
 import { socialLinks } from "../constants";
+import HeroSceneCanvas from "./canvas/HeroScene";
+import SpeechIntro from "./SpeechIntro";
 
 const roles = [
   "Full Stack Developer",
@@ -16,7 +17,9 @@ const Hero = () => {
   const [roleIndex, setRoleIndex] = useState(0);
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [amplitude, setAmplitude] = useState(0);
 
+  /* Typewriter effect */
   useEffect(() => {
     const current = roles[roleIndex];
     let timeout;
@@ -33,19 +36,36 @@ const Hero = () => {
     return () => clearTimeout(timeout);
   }, [text, isDeleting, roleIndex]);
 
+  /* Stable callback so SpeechIntro doesn't re-render on every frame */
+  const handleAmplitudeChange = useCallback((amp) => {
+    setAmplitude(amp);
+  }, []);
+
   return (
     <section className="relative w-full h-screen mx-auto overflow-hidden">
       {/* HUD grid background */}
       <div className="absolute inset-0 grid-bg opacity-40" />
-      
+
       {/* Radial glow overlays */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_25%_40%,rgba(0,212,255,0.08),transparent)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_75%_60%,rgba(123,47,247,0.06),transparent)]" />
+
+      {/* Dynamic accent glow when speaking */}
+      {amplitude > 0.05 && (
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(ellipse 70% 60% at 75% 50%, rgba(0,212,255,${(amplitude * 0.06).toFixed(3)}), transparent)`,
+            opacity: amplitude,
+          }}
+        />
+      )}
+
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-primary to-transparent z-10" />
 
-      {/* 3D Scene */}
-      <div className="absolute inset-0">
-        <HeroSceneCanvas />
+      {/* 3D Hero Scene — right side, full section */}
+      <div className="absolute inset-0 z-0">
+        <HeroSceneCanvas amplitude={amplitude} />
       </div>
 
       {/* Content */}
@@ -54,7 +74,14 @@ const Hero = () => {
       >
         {/* Accent line */}
         <div className="flex flex-col justify-center items-center mt-5">
-          <div className="w-5 h-5 rounded-full bg-accent shadow-[0_0_20px_rgba(0,212,255,0.6)]" />
+          <div
+            className="w-5 h-5 rounded-full bg-accent shadow-[0_0_20px_rgba(0,212,255,0.6)]"
+            style={{
+              boxShadow: amplitude > 0.1
+                ? `0 0 ${20 + amplitude * 40}px rgba(0,212,255,${0.6 + amplitude * 0.4})`
+                : undefined,
+            }}
+          />
           <div className="w-1 sm:h-60 h-40 bg-gradient-to-b from-accent via-accent-purple to-transparent" />
         </div>
 
@@ -88,7 +115,7 @@ const Hero = () => {
           <p className="mt-3 text-secondary/60 text-[14px] max-w-lg leading-relaxed">
             Building production-grade government platforms at IIT Bhilai.
             <br />
-            Specializing in Node.js, React.js, PostgreSQL & GenAI.
+            Specializing in Node.js, React.js, PostgreSQL &amp; GenAI.
           </p>
 
           {/* Social links */}
@@ -136,6 +163,9 @@ const Hero = () => {
           </div>
         </a>
       </div>
+
+      {/* 🔊 Speech Intro — fires once on first visit */}
+      <SpeechIntro onAmplitudeChange={handleAmplitudeChange} />
     </section>
   );
 };
