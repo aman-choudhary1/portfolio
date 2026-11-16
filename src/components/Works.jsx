@@ -1,6 +1,5 @@
-import React from "react";
-import Tilt from "react-parallax-tilt";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 import { styles } from "../styles";
 import { github } from "../assets";
@@ -8,100 +7,103 @@ import { SectionWrapper } from "../hoc";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 
-const ProjectCard = ({ index, name, description, tags, image, source_code_link }) => {
-  return (
-    <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
-      <Tilt
-        tiltMaxAngleX={8}
-        tiltMaxAngleY={8}
-        className="sm:w-[380px] w-full"
-      >
-        <div className="relative rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0c0c2e]/80 backdrop-blur-xl
-                        hover:border-accent/20 transition-all duration-500 group">
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-8 h-[1px] bg-gradient-to-r from-accent/50 to-transparent" />
-          <div className="absolute top-0 left-0 h-8 w-[1px] bg-gradient-to-b from-accent/50 to-transparent" />
-          <div className="absolute bottom-0 right-0 w-8 h-[1px] bg-gradient-to-l from-accent-pink/50 to-transparent" />
-          <div className="absolute bottom-0 right-0 h-8 w-[1px] bg-gradient-to-t from-accent-pink/50 to-transparent" />
+const ACCENTS = ["#00d4ff", "#7b2ff7", "#f72585", "#00ffaa"];
 
-          {/* Image */}
-          <div className="relative w-full h-[230px] overflow-hidden">
-            <img
-              src={image}
-              alt={name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c2e] via-transparent to-transparent" />
-            {/* HUD scan line on hover */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 overflow-hidden">
-              <div className="absolute left-0 right-0 h-[1px] bg-accent/20" style={{ animation: "scan-line 3s linear infinite" }} />
-            </div>
-            {/* GitHub button */}
-            <div className="absolute top-3 right-3">
-              <div
-                onClick={() => window.open(source_code_link, "_blank")}
-                className="w-9 h-9 rounded-lg bg-black/50 backdrop-blur-md border border-white/10
-                           flex justify-center items-center cursor-pointer
-                           hover:border-accent/40 hover:shadow-[0_0_12px_rgba(0,212,255,0.2)] transition-all duration-300"
-              >
-                <img src={github} alt="github" className="w-4 h-4 object-contain" />
-              </div>
-            </div>
+/* Each card sticks, and shrinks/dims as the next one slides over it */
+const StackCard = ({ project, index, total }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1 - (total - index) * 0.04]);
+  const dim = useTransform(scrollYProgress, [0, 1], [0, 0.5]);
+  const accent = ACCENTS[index % ACCENTS.length];
+
+  const onMove = (e) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
+  return (
+    <div ref={ref} className="stack-card h-[85vh] flex items-start" style={{ top: `${110 + index * 28}px` }}>
+      <motion.div
+        style={{ scale, transformOrigin: "top center" }}
+        onMouseMove={onMove}
+        className="spot-card group relative w-full rounded-[28px] overflow-hidden border border-white/[0.08] bg-[#08082a]/90 backdrop-blur-2xl
+                   grid md:grid-cols-[1.15fr_1fr] min-h-[460px] shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]"
+      >
+        {/* image side */}
+        <div className="relative overflow-hidden min-h-[220px]">
+          <img
+            src={project.image}
+            alt={project.name}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#08082a] md:block hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08082a] to-transparent md:hidden" />
+          <div className="absolute inset-0 mix-blend-color opacity-40" style={{ background: accent }} />
+        </div>
+
+        {/* content side */}
+        <div className="relative p-7 sm:p-10 flex flex-col">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[12px] tracking-[0.3em] uppercase" style={{ color: accent }}>
+              Project / {String(index + 1).padStart(2, "0")}
+            </span>
+            <button
+              onClick={() => window.open(project.source_code_link, "_blank")}
+              className="flex items-center gap-2 h-10 px-4 rounded-full border border-white/10 bg-white/5 text-[12px] text-white/80
+                         hover:bg-white hover:text-black transition-all duration-300"
+            >
+              <img src={github} alt="" className="w-4 h-4 object-contain group-hover:invert-0" />
+              Source
+            </button>
           </div>
 
-          {/* Content */}
-          <div className="p-5">
-            <h3 className="text-white font-bold text-[20px] font-display">
-              {name}
-            </h3>
-            <p className="mt-2 text-secondary/50 text-[13px] leading-relaxed">
-              {description}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <span
-                  key={tag.name}
-                  className={`text-[11px] font-mono font-medium px-2 py-0.5 rounded-md bg-white/[0.03] border border-white/[0.06] ${tag.color}`}
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
+          <span
+            className="absolute right-6 bottom-2 font-display font-black text-[160px] leading-none select-none pointer-events-none outline-text"
+            style={{ WebkitTextStroke: `1px ${accent}33` }}
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
+
+          <h3 className="mt-8 font-display font-bold text-white text-[28px] sm:text-[36px] leading-tight">{project.name}</h3>
+          <p className="mt-4 text-secondary/70 text-[14px] leading-[26px] max-w-md">{project.description}</p>
+
+          <div className="mt-auto pt-8 flex flex-wrap gap-2 relative">
+            {project.tags.map((tag) => (
+              <span key={tag.name} className="px-3 py-1 rounded-full text-[12px] font-mono border border-white/10 bg-white/[0.04] text-white/80">
+                #{tag.name}
+              </span>
+            ))}
           </div>
         </div>
-      </Tilt>
-    </motion.div>
-  );
-};
 
-const Works = () => {
-  return (
-    <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>My Work</p>
-        <h2 className={styles.sectionHeadText}>
-          Projects<span className="text-accent">.</span>
-        </h2>
+        <motion.div style={{ opacity: dim }} className="absolute inset-0 bg-black pointer-events-none" />
       </motion.div>
-
-      <div className="w-full flex">
-        <motion.p
-          variants={fadeIn("", "", 0.1, 1)}
-          className="mt-3 text-secondary/60 text-[14px] max-w-3xl leading-[28px]"
-        >
-          Real-world projects showcasing my skills across the full stack.
-          Each features links to source code and demonstrates problem-solving
-          with modern technologies.
-        </motion.p>
-      </div>
-
-      <div className="mt-16 flex flex-wrap gap-7 justify-center">
-        {projects.map((project, index) => (
-          <ProjectCard key={`project-${index}`} index={index} {...project} />
-        ))}
-      </div>
-    </>
+    </div>
   );
 };
+
+const Works = () => (
+  <>
+    <motion.div variants={textVariant()}>
+      <p className={styles.sectionSubText}>Selected work</p>
+      <h2 className={styles.sectionHeadText}>
+        Projects<span className="text-accent">.</span>
+      </h2>
+    </motion.div>
+
+    <motion.p variants={fadeIn("", "", 0.1, 1)} className="mt-3 text-secondary/60 text-[14px] max-w-3xl leading-[28px]">
+      Real-world builds across the full stack. Scroll — they stack.
+    </motion.p>
+
+    <div className="mt-12 relative">
+      {projects.map((project, index) => (
+        <StackCard key={project.name} project={project} index={index} total={projects.length} />
+      ))}
+    </div>
+  </>
+);
 
 export default SectionWrapper(Works, "projects");

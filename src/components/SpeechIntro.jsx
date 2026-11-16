@@ -143,7 +143,7 @@ const PlayButton = ({ onClick }) => (
 );
 
 /* ─── Main component ─── */
-const SpeechIntro = ({ onAmplitudeChange }) => {
+const SpeechIntro = ({ onAmplitudeChange, replayKey = 0 }) => {
   const { speak, stop, isSpeaking, amplitude, hasSpoken, isSupported } = useSpeech();
   const [visible, setVisible]       = useState(false);
   const [dismissed, setDismissed]   = useState(false);
@@ -158,6 +158,15 @@ const SpeechIntro = ({ onAmplitudeChange }) => {
     const t = setTimeout(() => setVisible(true), 900);
     return () => clearTimeout(t);
   }, []);
+
+  /* Re-open on demand (hero "Hear my intro" button) */
+  useEffect(() => {
+    if (!replayKey) return;
+    stop();
+    setDismissed(false);
+    setHasStarted(false);
+    setVisible(true);
+  }, [replayKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Auto-dismiss 1.5s after speech ends */
   useEffect(() => {

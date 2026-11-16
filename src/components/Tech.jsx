@@ -261,17 +261,6 @@ const Tech = () => {
         A comprehensive toolkit refined through real-world projects and production systems.
       </motion.p>
 
-      {/* Neural Network 3D Visualization */}
-      <motion.div
-        variants={fadeIn("up", "spring", 0.2, 0.75)}
-        className="mt-8"
-      >
-        <p className="text-center text-secondary/30 text-[11px] uppercase tracking-[0.4em] font-mono mb-2">
-          ◆ Neural Network Visualization ◆
-        </p>
-        <NeuralNetworkCanvas />
-      </motion.div>
-
       {/* Tech Icons Row */}
       <div className="mt-6 flex flex-row flex-wrap justify-center gap-5">
         {technologies.map((technology, index) => (

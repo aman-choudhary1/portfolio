@@ -18,6 +18,7 @@ const Hero = () => {
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [amplitude, setAmplitude] = useState(0);
+  const [replayKey, setReplayKey] = useState(0);
 
   /* Typewriter effect */
   useEffect(() => {
@@ -43,25 +44,21 @@ const Hero = () => {
 
   return (
     <section className="relative w-full h-screen mx-auto overflow-hidden">
-      {/* HUD grid background */}
-      <div className="absolute inset-0 grid-bg opacity-40" />
+      {/* Modern aurora background */}
+      <div className="absolute inset-0 aurora" />
+      <div className="absolute inset-0 dot-grid opacity-60" />
+      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-primary to-transparent z-10" />
 
-      {/* Radial glow overlays */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_25%_40%,rgba(0,212,255,0.08),transparent)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_75%_60%,rgba(123,47,247,0.06),transparent)]" />
-
-      {/* Dynamic accent glow when speaking */}
-      {amplitude > 0.05 && (
-        <div
-          className="absolute inset-0 pointer-events-none transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(ellipse 70% 60% at 75% 50%, rgba(0,212,255,${(amplitude * 0.06).toFixed(3)}), transparent)`,
-            opacity: amplitude,
-          }}
-        />
-      )}
-
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-primary to-transparent z-10" />
+      {/* Giant outlined marquee */}
+      <div className="absolute bottom-24 left-0 right-0 z-[5] pointer-events-none marquee">
+        <div className="marquee-track" style={{ animationDuration: "40s" }}>
+          {Array.from({ length: 2 }).map((_, k) => (
+            <span key={k} className="outline-text font-display font-black text-[90px] sm:text-[130px] whitespace-nowrap px-6">
+              FULL STACK ✦ BACKEND ✦ REACT ✦ NODE.JS ✦ GENERATIVE AI ✦ POSTGRESQL ✦&nbsp;
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* 3D Hero Scene — right side, full section */}
       <div className="absolute inset-0 z-0">
@@ -94,9 +91,28 @@ const Hero = () => {
             </span>
           </div>
 
-          <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I'm{" "}
-            <span className="accent-text-gradient text-glow">Aman</span>
+          <h1 className="font-display font-black text-white leading-[0.9]">
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 2.6, duration: 0.6 }}
+              className="block text-[22px] sm:text-[28px] font-medium text-white/70 mb-2"
+            >
+              Hi, I&apos;m
+            </motion.span>
+            <span className="flex overflow-hidden pb-2">
+              {"AMAN".split("").map((ch, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: "110%", rotate: 8 }}
+                  animate={{ y: 0, rotate: 0 }}
+                  transition={{ delay: 2.7 + i * 0.08, duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+                  className="hero-name text-[72px] xs:text-[96px] sm:text-[130px] lg:text-[160px] tracking-[-0.04em]"
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </span>
           </h1>
 
           <div className="mt-2 flex items-center gap-1">
@@ -118,8 +134,28 @@ const Hero = () => {
             Specializing in Node.js, React.js, PostgreSQL &amp; GenAI.
           </p>
 
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-3 mt-6">
+            <button
+              onClick={() => setReplayKey((k) => k + 1)}
+              className="flex items-center gap-2 px-5 h-10 rounded-xl text-[12px] font-mono uppercase tracking-widest
+                         text-white bg-gradient-to-r from-accent/20 to-accent-purple/20 border border-accent/40
+                         hover:shadow-[0_0_24px_rgba(0,212,255,0.35)] transition-all duration-500"
+            >
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+              Hear my intro
+            </button>
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+              className="hidden sm:flex items-center gap-2 px-4 h-10 rounded-xl text-[12px] font-mono text-secondary/60
+                         border border-white/[0.08] hover:border-accent/30 hover:text-accent transition-all duration-500"
+            >
+              Quick nav <kbd className="px-1.5 py-0.5 rounded bg-white/5 text-[10px]">Ctrl K</kbd>
+            </button>
+          </div>
+
           {/* Social links */}
-          <div className="flex gap-3 mt-6">
+          <div className="flex gap-3 mt-4">
             {[
               { href: socialLinks.github, label: "GH", icon: (
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -165,7 +201,7 @@ const Hero = () => {
       </div>
 
       {/* 🔊 Speech Intro — fires once on first visit */}
-      <SpeechIntro onAmplitudeChange={handleAmplitudeChange} />
+      <SpeechIntro onAmplitudeChange={handleAmplitudeChange} replayKey={replayKey} />
     </section>
   );
 };

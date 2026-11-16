@@ -39,7 +39,7 @@ const mouseState = { x: 0, y: 0 };
    SCROLL KEYFRAMES — the computer glides left↔right at each section
    ═══════════════════════════════════════════════════════════════════ */
 const keyframes = [
-  { at: 0,    pos: [4.2, -1.8, 0],    rot: [0, 0.25, 0],       s: 0.55 },
+  { at: 0,    pos: [7, -2.6, -3],     rot: [0, -0.4, 0],       s: 0.32 },
   { at: 0.13, pos: [-5, -1.5, -1.5],  rot: [0.05, -0.7, 0],    s: 0.38 },
   { at: 0.28, pos: [5.2, -2, -1.5],   rot: [0.08, 0.35, 0.03], s: 0.35 },
   { at: 0.42, pos: [-6.5, -1.5, -3.5], rot: [-0.03, -0.6, 0],   s: 0.3 },
@@ -137,14 +137,6 @@ const ScrollComputer = () => {
           <meshStandardMaterial color="#f72585" emissive="#f72585" emissiveIntensity={0.5} transparent opacity={0.12} />
         </mesh>
       </group>
-
-      {/* Orbiting particles */}
-      <points ref={particlesRef} position={[0, -1, -0.5]}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={particleCount} array={particlePositions} itemSize={3} />
-        </bufferGeometry>
-        <pointsMaterial color="#00d4ff" size={0.05} transparent opacity={0.5} sizeAttenuation depthWrite={false} blending={THREE.AdditiveBlending} />
-      </points>
     </group>
   );
 };
@@ -433,21 +425,15 @@ const GlobalScene = () => {
       <pointLight position={[-5, -5, 5]} color="#7b2ff7" intensity={0.5} distance={20} />
 
       <MouseReactiveCam />
-      <StarField />
       <SectionObjects />
       <ScrollComputer />
-
-      {/* Hero elements — fade out on scroll */}
-      <HeroMorphingSphere />
-      <HeroGalaxy />
-      <HeroRings />
     </group>
   );
 };
 
 const GlobalSceneCanvas = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 50 }}
         gl={{ antialias: true, alpha: true, preserveDrawingBuffer: true }}

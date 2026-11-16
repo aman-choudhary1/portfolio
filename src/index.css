@@ -478,3 +478,77 @@ body {
   0%   { background-position: 200% center; }
   100% { background-position: -200% center; }
 }
+
+
+/* ── Modern hero background ── */
+.aurora {
+  background:
+    radial-gradient(ellipse 55% 45% at 78% 45%, rgba(123, 47, 247, 0.28), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 20% 30%, rgba(0, 212, 255, 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 60% 90%, rgba(247, 37, 133, 0.12), transparent 70%);
+  filter: blur(30px);
+  animation: aurora-drift 14s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(2%, 2%, 0) scale(1.08); }
+}
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+/* ── Spotlight cards ── */
+.spot-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 212, 255, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.spot-card:hover::before { opacity: 1; }
+.spot-card:hover { border-color: rgba(0, 212, 255, 0.3); }
+
+/* ── Tech marquee ── */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ── Hero name: animated gradient fill ── */
+.hero-name {
+  display: inline-block;
+  background: linear-gradient(110deg, #ffffff 20%, #00d4ff 40%, #7b2ff7 60%, #f72585 80%, #ffffff 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: name-sheen 6s ease-in-out infinite;
+}
+@keyframes name-sheen {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ── Outlined display text ── */
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.09);
+}
+
+/* ── Stacking project cards ── */
+.stack-card { position: sticky; }

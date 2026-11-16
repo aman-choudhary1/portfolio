@@ -3,7 +3,7 @@ import Tilt from "react-parallax-tilt";
 import { motion } from "framer-motion";
 
 import { styles } from "../styles";
-import { services, stats } from "../constants";
+import { services } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { fadeIn, textVariant } from "../utils/motion";
 
@@ -36,18 +36,6 @@ const ServiceCard = ({ index, title, icon, description }) => (
   </Tilt>
 );
 
-const StatItem = ({ value, label, index }) => (
-  <motion.div
-    variants={fadeIn("up", "spring", index * 0.2, 0.5)}
-    className="text-center group"
-  >
-    <div className="stat-value text-[36px] sm:text-[44px] mb-1 transition-all duration-300 group-hover:scale-105">
-      {value}
-    </div>
-    <p className="text-secondary/40 text-[12px] font-mono uppercase tracking-[0.15em]">{label}</p>
-  </motion.div>
-);
-
 const About = () => {
   return (
     <>
@@ -69,13 +57,6 @@ const About = () => {
         development, frontend dashboards, and database optimization. Actively
         expanding expertise in Artificial Intelligence, NLP, and Generative AI.
       </motion.p>
-
-      {/* Stats */}
-      <div className="mt-12 flex flex-wrap gap-10 sm:gap-16 justify-center">
-        {stats.map((stat, index) => (
-          <StatItem key={stat.label} index={index} {...stat} />
-        ))}
-      </div>
 
       {/* Service Cards */}
       <div className="mt-16 flex flex-wrap gap-8 justify-center">

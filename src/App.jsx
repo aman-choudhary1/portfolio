@@ -13,23 +13,32 @@ import {
 } from './components';
 import FuturisticCursor from './components/FuturisticCursor';
 import GlobalSceneCanvas from './components/canvas/GlobalScene';
+import Highlights from './components/Highlights';
+import Terminal from './components/Terminal';
+import Preloader from './components/Preloader';
+import useSmoothScroll from './utils/useSmoothScroll';
+import CommandPalette from './components/CommandPalette';
 
 /* CSS-only section divider */
 const SectionDivider = () => (
-  <div className="relative w-full h-[60px] overflow-hidden">
-    <div className="wave-divider" />
-  </div>
+  <div className="relative w-full h-px my-6 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 );
 
 const App = () => {
+  useSmoothScroll();
+
   return (
     <BrowserRouter>
       <div className='relative z-0 bg-primary'>
         {/* Futuristic cursor (CSS + Canvas, no WebGL) */}
         <FuturisticCursor />
 
-        {/* Global scroll-reactive 3D scene — Canvas #1 */}
+        {/* Scroll-driven 3D computer */}
         <GlobalSceneCanvas />
+
+        <Preloader />
+        <CommandPalette />
+        <Terminal />
 
         {/* Navigation */}
         <Navbar />
@@ -39,6 +48,8 @@ const App = () => {
 
         <SectionDivider />
         <About />
+
+        <Highlights />
 
         <Experience />
 

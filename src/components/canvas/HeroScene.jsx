@@ -4,6 +4,7 @@ import { Float, Preload } from "@react-three/drei";
 import * as THREE from "three";
 import { Suspense } from "react";
 import CanvasLoader from "../Loader";
+import AvatarBot from "./AvatarBot";
 
 /* ─── Morphing Sphere Core — now amplitude-aware ─── */
 const MorphingSphere = ({ amplitude = 0 }) => {
@@ -402,6 +403,12 @@ const CameraRig = () => {
 
 /* ─── Main Scene ─── */
 const HeroScene = ({ amplitude = 0 }) => {
+  /* Anchor the avatar on the right on desktop, bottom-centre on mobile */
+  const { viewport } = useThree();
+  const wide = viewport.width > 11;
+  const anchor = wide ? [viewport.width * 0.12, -0.2, 0] : [0, -3.1, 0];
+  const s = wide ? 1 : 0.65;
+
   return (
     <group>
       <ambientLight intensity={0.15} />
@@ -411,24 +418,9 @@ const HeroScene = ({ amplitude = 0 }) => {
       <pointLight position={[3, -3, -3]} color="#00ffaa" intensity={0.5} distance={15} />
 
       <CameraRig />
-      <MorphingSphere amplitude={amplitude} />
-      <VoiceRings     amplitude={amplitude} />
-      <SpeechParticles amplitude={amplitude} />
-      <GalaxyParticles />
-
-      <OrbitalRing radius={3}   color="#00d4ff" speed={0.15}  tilt={[0.3, 0, 0]} />
-      <OrbitalRing radius={4.2} color="#7b2ff7" speed={-0.1}  tilt={[0.9, 0.2, 0]} />
-      <OrbitalRing radius={5.5} color="#f72585" speed={0.07}  tilt={[1.3, 0.5, 0]} />
-      <OrbitalRing radius={7}   color="#00ffaa" speed={-0.05} tilt={[0.5, 1, 0.3]} />
-
-      <FloatingShape geometry={<torusGeometry args={[0.5, 0.18, 16, 48]} />}       position={[4,  1,  -2]} color="#00d4ff" speed={0.8}  scale={1.2} />
-      <FloatingShape geometry={<octahedronGeometry args={[0.6]} />}                position={[-4, -1,  1]} color="#7b2ff7" speed={0.6}  scale={1.1} />
-      <FloatingShape geometry={<dodecahedronGeometry args={[0.45]} />}             position={[3, -2.5, 3]} color="#f72585" speed={0.7}  scale={1}   />
-      <FloatingShape geometry={<tetrahedronGeometry args={[0.5]} />}               position={[-3, 2.5,-3]} color="#00ffaa" speed={0.9}  scale={1}   />
-      <FloatingShape geometry={<torusKnotGeometry args={[0.35, 0.12, 100, 16]} />} position={[0,  3.5,-4]} color="#4dc9f6" speed={0.5}  scale={0.9} />
-      <FloatingShape geometry={<icosahedronGeometry args={[0.4, 0]} />}            position={[-5, 0,  -3]} color="#00d4ff" speed={0.65} scale={1}   />
-      <FloatingShape geometry={<coneGeometry args={[0.35, 0.7, 6]} />}             position={[5, -1,  -4]} color="#f72585" speed={0.75} scale={1.1} />
-      <FloatingShape geometry={<torusGeometry args={[0.3, 0.1, 16, 32]} />}        position={[-2,-3,   2]} color="#7b2ff7" speed={0.55} scale={1.3} />
+      <group position={anchor} scale={s}>
+        <AvatarBot amplitude={amplitude} position={[0, 0.2, 0]} />
+      </group>
     </group>
   );
 };
